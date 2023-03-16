@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib.auth import login
 
 
 FACEBOOK_APP_ID = 'YOUR APP ID'
@@ -49,7 +50,7 @@ def facebook_login_callback(request):
         )
         user.save()
 
-    auth_login(request, user[0])
+    login(request, user[0])
 
     # Redirect the user to the appropriate page
     return redirect('/')
