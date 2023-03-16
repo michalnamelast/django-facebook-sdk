@@ -35,9 +35,21 @@ def facebook_login_callback(request):
     user_info = graph.get_object('me', fields='id,email,first_name,last_name')
 
     # # You can now use user_info to create or authenticate a user in your system
-    print('Username:', user_info.get('first_name'))
-    print('Lastname:', user_info.get('last_name'))
-    print('Email:', user_info.get('email'))
+    user_id = user_info.get('id')
+    first_name = user_info.get('first_name')
+    last_name = user_info.get('last_name')
+    email = user_info.get('email')
+    user = User.objects.filter(pk=user_id)
+    if not user:
+        user = User.objects.create(
+            pk=user_id,
+            first_name=first_name,
+            last_name=last_name,
+            email=email
+        )
+        user.save()
+
+    auth_login(request, user[0])
 
     # Redirect the user to the appropriate page
     return redirect('/')
